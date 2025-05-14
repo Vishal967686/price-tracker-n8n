@@ -1,0 +1,1488 @@
+{
+  "name": "Go Fuck Yourself",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1460,
+        -60
+      ],
+      "id": "cbcfcb91-ebb9-425e-88cf-0085105fe192",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Nike",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1200,
+        -260
+      ],
+      "id": "889e1208-75b7-4e8f-a534-af9b7b59bec6",
+      "name": "Nike",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 326321023,
+          "mode": "list",
+          "cachedResultName": "Sporting Goods",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=326321023"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1200,
+        20
+      ],
+      "id": "e70cec77-042d-4882-9bd8-35a15dde2ebe",
+      "name": "Sporting Goods",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1115454868,
+          "mode": "list",
+          "cachedResultName": "Finish Line ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=1115454868"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1200,
+        480
+      ],
+      "id": "bd8113f9-5c68-42cb-8abb-0655577098c0",
+      "name": "Finish Line",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Use regex to find price inside HTML (from books.toscrape.com format)\nconst html = $json.data;\nconst priceMatch = html.match(/<p class=\"price_color\">£(\\d+\\.\\d{2})<\\/p>/);\n\n// Extract the price and clean it (remove currency symbol and convert to number)\nconst priceText = priceMatch ? parseFloat(priceMatch[1]) * 100 : null;  // Multiplying to convert to rupees for comparison\n\nreturn [{\n  json: {\n    \"Product Name\": $json[\"Product Name\"],\n    \"Product URL\": $json[\"Product URL\"],\n    \"Our Price\": Number($json[\"Product Price\"]),\n    \"Competitor Price\": priceText\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -260
+      ],
+      "id": "abe6548d-2c45-431b-b813-f1d429cbc63b",
+      "name": "Extract Nike Price"
+    },
+    {
+      "parameters": {
+        "url": "https://app.scrapingbee.com/api/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "XS96KUP9A818B912LYVS4X62JB6PUCJV4VCR5I6SJW6GMB225OZOM7JQCRJJC0IRK96FG04U57R79Y8K"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json[\"Product URL\"] }}"
+            },
+            {
+              "name": "render_js",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        -260
+      ],
+      "id": "075ddf66-c661-4d4b-9a44-5d271bd14c47",
+      "name": "Scrape Nike"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "85f023f0-a95f-45b1-a53f-d738f000d05b",
+              "leftValue": "={{ Number($json[\"Competitor Price\"]) }}",
+              "rightValue": "={{ Number($json[\"Our Price\"]) }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        -260
+      ],
+      "id": "64558ab7-7a8e-4449-bee2-022a53b27a22",
+      "name": "If Nike Cheaper"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -760,
+        -460
+      ],
+      "id": "a00b2a6c-b39b-4ad8-86e1-1b70e195d946",
+      "name": "Merge Nike Info + HTML",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "de98c193-eee3-4072-8886-f0514e814453",
+              "name": "row_number",
+              "value": "={{ Number($node[\"Nike\"].json[\"row_number\"]) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -460,
+        -260
+      ],
+      "id": "afcbf128-b1bd-4c0b-9f26-a24163229fdd",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fromEmail": "vishag9676@gmail.com",
+        "toEmail": "vishalvishu248@gmail.com",
+        "subject": "=Competitor lowerd his price for {{$json[\"Product Name\"]}} , Boss! Let's FUCK him",
+        "html": "=HI BOSS!\nProduct: {{$json[\"Product Name\"]}}  \nOur Price: ₹{{$json[\"Our Price\"]}}  \nCompetitor Price: ₹{{$json[\"Competitor Price\"]}}  \nProduct Link: {{$json[\"Product URL\"]}}\nLooks like the competitors wanna play. Let it RIP...\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        520,
+        -620
+      ],
+      "id": "f75a2028-a327-42d3-91b9-752e5d91b353",
+      "name": "Send Email",
+      "webhookId": "57925975-16f8-4d8c-a999-8fd08c3c5e2a",
+      "credentials": {
+        "smtp": {
+          "id": "cfDhtgWI3IDaZ2cO",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -980,
+        20
+      ],
+      "id": "49666747-0614-4cd9-b749-5fc4c7c651c8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b6fc156-38cf-4a8a-a64e-4119ac387a4b",
+              "name": "row_number",
+              "value": "={{$json[\"row_number\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        40
+      ],
+      "id": "1fb0d259-34fd-41d4-a9f6-da08e6aa018e",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "url": "https://app.scrapingbee.com/api/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "XS96KUP9A818B912LYVS4X62JB6PUCJV4VCR5I6SJW6GMB225OZOM7JQCRJJC0IRK96FG04U57R79Y8K"
+            },
+            {
+              "name": "url",
+              "value": "={{$json[\"Product URL\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        120
+      ],
+      "id": "a92f1ef7-ba75-4da5-8d76-dd806de60d59",
+      "name": "Scrape Sporting Goods"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract price from scraped HTML using regex\nconst html = $json[\"data\"];\nconst priceMatch = html.match(/<[^>]*class=\"price_color\"[^>]*>(.*?)<\\/[^>]+>/i);\n\n// Clean the price (remove currency symbols, commas, etc.)\nconst priceText = priceMatch ? priceMatch[1].replace(/[^\\d]/g, '') : null;\n\n// Return merged and formatted data\nreturn [{\n  json: {\n    \"Product Name\": $json[\"Product Name\"],\n    \"Product URL\": $json[\"Product URL\"],\n    \"Our Price\": $json[\"Product Price\"],\n    \"Competitor Price\": priceText\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        -20
+      ],
+      "id": "00ade99f-11f6-4eba-99f2-641fe566fb07",
+      "name": "Extract Sporting Goods Price"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -140,
+        -20
+      ],
+      "id": "3bbbcf12-9dcb-4453-a5d3-28fabbace7fc",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f7edf9ae-da44-428b-a7f2-6b182939832d",
+              "leftValue": "={{ Number($json[\"Competitor Price\"]) }}",
+              "rightValue": "={{ Number($json[\"Our Price\"]) }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        -20
+      ],
+      "id": "8f63d334-ad7f-4c40-990a-24bcfe9e5cd1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "fromEmail": "vishalg2426@gmail.com",
+        "toEmail": "vishalvishu248@gmail.com",
+        "subject": "=Price Drop Alert: {{$json[\"Product Name\"]}}",
+        "html": "=The product {{$json[\"Product Name\"]}} is cheaper on Sporting Goods!\nCompetitor Price: ₹{{$json[\"Competitor Price\"]}}\nOur Price: ₹{{$json[\"Our Price\"]}}\nProduct URL: {{$json[\"Product URL\"]}}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1100,
+        -40
+      ],
+      "id": "a71361a8-1d24-4e9b-93c3-196a3a4a22de",
+      "name": "Send Email1",
+      "webhookId": "c1ec058e-abc0-42e2-bef5-ca37717eef68",
+      "credentials": {
+        "smtp": {
+          "id": "cfDhtgWI3IDaZ2cO",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -960,
+        480
+      ],
+      "id": "64424062-d291-4d1d-9c17-ad41f121625a",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b6fc156-38cf-4a8a-a64e-4119ac387a4b",
+              "name": "row_number",
+              "value": "={{$json[\"row_number\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        480
+      ],
+      "id": "04d34cc7-5bb5-4026-be65-88c9bdc4643f",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "url": "https://app.scrapingbee.com/api/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "XS96KUP9A818B912LYVS4X62JB6PUCJV4VCR5I6SJW6GMB225OZOM7JQCRJJC0IRK96FG04U57R79Y8K"
+            },
+            {
+              "name": "url",
+              "value": "={{$json[\"Product URL\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        560
+      ],
+      "id": "6a3e77b1-2f01-472d-897b-960b19003d7b",
+      "name": "Scrape Sporting Goods1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -140,
+        420
+      ],
+      "id": "4ab1ccf7-fba7-4148-8141-1c60124da306",
+      "name": "Merge Finish Line Info + HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract price from scraped HTML using regex\nconst html = $json[\"data\"];\nconst priceMatch = html.match(/<[^>]*class=\"price_color\"[^>]*>(.*?)<\\/[^>]+>/i);\n\n// Clean the price (remove currency symbols, commas, etc.)\nconst priceText = priceMatch ? priceMatch[1].replace(/[^\\d]/g, '') : null;\n\n// Return merged and formatted data\nreturn [{\n  json: {\n    \"Product Name\": $json[\"Product Name\"],\n    \"Product URL\": $json[\"Product URL\"],\n    \"Our Price\": $json[\"Product Price\"],\n    \"Competitor Price\": priceText\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        420
+      ],
+      "id": "5046e8da-7e66-4a13-9db0-22d19a66f26b",
+      "name": "Extract Finish Line Price"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f7edf9ae-da44-428b-a7f2-6b182939832d",
+              "leftValue": "={{ Number($json[\"Competitor Price\"]) }}",
+              "rightValue": "={{ Number($json[\"Our Price\"]) }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        420
+      ],
+      "id": "d6803b85-63b9-4508-9f44-b293b30c04cb",
+      "name": "If Finish Line Cheaper"
+    },
+    {
+      "parameters": {
+        "fromEmail": "vishalg2426@gmail.com",
+        "toEmail": "vishalvishu248@gmail.com",
+        "subject": "=Price Drop Alert: {{$json[\"Product Name\"]}}",
+        "html": "=The product {{$json[\"Product Name\"]}} is cheaper on Sporting Goods!\nCompetitor Price: ₹{{$json[\"Competitor Price\"]}}\nOur Price: ₹{{$json[\"Our Price\"]}}\nProduct URL: {{$json[\"Product URL\"]}}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        820,
+        400
+      ],
+      "id": "26d270cb-89e3-4b9f-8f0f-a3ce94373d10",
+      "name": "Send Finish Line Email",
+      "webhookId": "c1ec058e-abc0-42e2-bef5-ca37717eef68",
+      "credentials": {
+        "smtp": {
+          "id": "cfDhtgWI3IDaZ2cO",
+          "name": "SMTP account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Cheaper"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        520,
+        -400
+      ],
+      "id": "7f36527c-d8f2-4e9c-abf8-a9efda31f160",
+      "name": "Nike1",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Costlier"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        520,
+        -200
+      ],
+      "id": "53851c36-0b9b-4f18-a7a3-95708314d662",
+      "name": "Nike2",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Cheaper"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        920,
+        -200
+      ],
+      "id": "db9d10ab-05be-4155-b39a-171ad81f7860",
+      "name": "Nike3",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Costlier"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        920,
+        120
+      ],
+      "id": "4d4206e9-1ded-41e2-b9c0-e11064d7ed5c",
+      "name": "Nike4",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Cheaper"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        680,
+        240
+      ],
+      "id": "af9de565-5a30-4c9e-bf92-d01979710c5c",
+      "name": "Nike5",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262982954,
+          "mode": "list",
+          "cachedResultName": "Price Tracker Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1T8Dsip6eCbvS6RT1N54MUxIz9LlZzznbTWoIs3LGolk/edit#gid=262982954"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "{{ new Date().toLocaleString() }}",
+            "Product Name": "{{ $json[\"Product Name\"] }}",
+            "Product URL": "{{ $json[\"Product URL\"] }}",
+            "Our Price": "{{ $json[\"Our Price\"] }}",
+            "Competitor Price ": "{{ $json[\"Competitor Price\"] }}",
+            "Status": "Costlier"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product URL",
+              "displayName": "Product URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Our Price",
+              "displayName": "Our Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Price ",
+              "displayName": "Competitor Price ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        680,
+        600
+      ],
+      "id": "354867bf-0fc3-4996-a70c-94572d2bb55e",
+      "name": "Nike6",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wvEUUSF0wUw27pIp",
+          "name": "Google Sheets account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Nike",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sporting Goods",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Finish Line",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nike": {
+      "main": [
+        [
+          {
+            "node": "Merge Nike Info + HTML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape Nike",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Nike Price": {
+      "main": [
+        [
+          {
+            "node": "If Nike Cheaper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Nike": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Nike Info + HTML": {
+      "main": [
+        [
+          {
+            "node": "Extract Nike Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge Nike Info + HTML",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If Nike Cheaper": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Nike1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nike2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sporting Goods": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape Sporting Goods",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Sporting Goods": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Extract Sporting Goods Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Sporting Goods Price": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send Email1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Nike3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nike4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finish Line": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Scrape Sporting Goods1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Finish Line Info + HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Sporting Goods1": {
+      "main": [
+        [
+          {
+            "node": "Merge Finish Line Info + HTML",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Finish Line Info + HTML": {
+      "main": [
+        [
+          {
+            "node": "Extract Finish Line Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Finish Line Price": {
+      "main": [
+        [
+          {
+            "node": "If Finish Line Cheaper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Finish Line Cheaper": {
+      "main": [
+        [
+          {
+            "node": "Send Finish Line Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Nike5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nike6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4afd0216-ddb5-4223-8a4e-d497e8d37d27",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd059941cacd31037319fe9ed4a01bfa1c0393ac2d8ce2267beb5d3390b2009f"
+  },
+  "id": "Pm5Bz8fDj6AvJrJf",
+  "tags": []
+}
